@@ -1,0 +1,39 @@
+schema {
+    query: Query
+	mutation: Mutation
+}
+
+type Query {
+    vegetable(name: String!): Vegetable
+	vegetables: [Vegetable]
+    todofile(name: String!): TodoFile
+}
+
+type Mutation{
+    createVegetable(vegetable: VegetableInput): Vegetable
+    createTodoFile(todofile: TodoFileInput): TodoFile
+}
+
+type TodoFile {
+    name: String!
+    path: String
+    data: String
+}
+
+type Vegetable {
+    name: String!
+    price: Int!
+    image: String
+}
+
+input TodoFileInput {
+	name: String! 
+    path: String
+	data: String
+}
+
+input VegetableInput{
+    name: String!
+    price: Int!
+    image: String
+}
