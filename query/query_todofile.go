@@ -3,10 +3,10 @@ package query
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/CodingProjects/Go/GoDo/inputs"
 	"github.com/CodingProjects/Go/GoDo/models"
@@ -14,34 +14,58 @@ import (
 )
 
 func (q *Query) TodoFile(ctx context.Context, args struct{ Name string }) *resolvers.TodoFileResolver {
-	file, err := os.Open(args.Name) // For read access.
+	value := resolvers.TodoFileResolver{}
+	// dir := fmt.Sprint("/", args.Name)
+	// file, err := os.Open(dir) // For read access.
+	// if err != nil {
+	// 	log.Printf("error: %s, while trying to open file: %s", err, args.Name)
+	// 	return nil
+	// }
+
+	files, err := os.ReadDir(".")
 	if err != nil {
-		log.Printf("error: %s, while trying to open file: %s", err, file)
-		return nil
+		log.Println(err)
 	}
 
-	thepath, err := filepath.Abs(filepath.Dir(file.Name()))
-	if err != nil {
-		panic(err)
-	}
-	log.Printf("path: %s", thepath)
+	for _, file := range files {
+		fmt.Println(file.Name())
 
-	// Read entire file content, giving us little control but
-	// making it very simple. No need to close the file.
-	content, err := ioutil.ReadFile(args.Name)
-	if err != nil {
-		log.Fatal(err)
-	}
+		if strings.Contains(file.Name(), "TODO") {
+			thepath, err := filepath.Abs(filepath.Dir(file.Name()))
+			if err != nil {
+				log.Println(err)
+			}
+			log.Printf("path: %s", thepath)
 
-	// Convert []byte to string and print to screen
-	text := string(content)
+			files2, err := os.ReadDir("TODO")
+			if err != nil {
+				log.Println(err)
+			}
 
-	value := resolvers.TodoFileResolver{
-		T: &models.TodoFile{
-			Name: args.Name,
-			Path: &thepath,
-			Data: &text,
-		},
+			for _, file2 := range files2 {
+				if strings.Contains(file2.Name(), args.Name) {
+					path, err := filepath.Abs(filepath.Dir(file2.Name()))
+					if err != nil {
+						log.Println(err)
+					}
+					fullpath := thepath + "/" + file.Name() + "/" + args.Name
+					log.Printf("fullpath: %s", fullpath)
+
+					text, err := os.ReadFile(fullpath)
+					if err != nil {
+						log.Println(err)
+					}
+					data := string(text)
+					value = resolvers.TodoFileResolver{
+						T: &models.TodoFile{
+							Name: args.Name,
+							Path: &path,
+							Data: &data,
+						},
+					}
+				}
+			}
+		}
 	}
 
 	return &value
@@ -72,20 +96,6 @@ func (m *Query) CreateTodoFile(args struct{ TodoFile *inputs.TodoFileInput }) *r
 		}
 
 		defer dst.Close()
-
-		// If the file doesn't exist, create it, or append to the file
-		// file, err := os.OpenFile(args.TodoFile.Name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-		// if err != nil {
-		// 	log.Printf("error: %s, while trying to open file: %s", err, file)
-		// 	return nil
-		// }
-		// if _, err := file.Write([]byte(*args.TodoFile.Data)); err != nil {
-		// 	file.Close() // ignore error; Write error takes precedence
-		// 	log.Fatal(err)
-		// }
-		// if err := file.Close(); err != nil {
-		// 	log.Fatal(err)
-		// }
 
 		thepath, err = filepath.Abs(filepath.Dir(dst.Name()))
 		if err != nil {
