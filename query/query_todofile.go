@@ -12,7 +12,7 @@ import (
 	"github.com/CodingProjects/Go/GoDo/models"
 	"github.com/CodingProjects/Go/GoDo/resolvers"
 )
-
+type Query struct{}
 func (q *Query) TodoFile(ctx context.Context, args struct{ Name string }) *resolvers.TodoFileResolver {
 	value := resolvers.TodoFileResolver{}
 	// dir := fmt.Sprint("/", args.Name)
