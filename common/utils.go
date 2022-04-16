@@ -1,6 +1,7 @@
 package common
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -9,6 +10,20 @@ import (
 // Utils
 func StrPtr(str string) *string {
 	return &str
+}
+
+func BaseTodoDirectory() string {
+	p, err := filepath.Abs(".")
+	if err != nil {
+		panic(fmt.Sprintf("getting dir at path: %s", p))
+	}
+	root := filepath.Join(p, "TODO")
+	if _, err := os.Stat(root); err != nil {
+		if err := CreateTodoDirectory(); err != nil {
+			panic(err)
+		}
+	}
+	return root
 }
 
 func CreateTodoDirectory() error {

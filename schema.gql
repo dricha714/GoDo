@@ -7,18 +7,28 @@ type Query {
     todofile(name: String!): TodoFile
 }
 
-type Mutation{
-    createTodoFile(todofile: TodoFileInput): TodoFile
-}
-
 type TodoFile {
     name: String!
     path: String
-    data: String
+    items: [TodoItem]
+}
+
+type TodoItem {
+    completed: Boolean
+    label: String
+}
+
+type Mutation{
+    createTodoFile(todofile: TodoFileInput): TodoFile
 }
 
 input TodoFileInput {
 	name: String! 
     path: String
-	data: String
+	items: [TodoItemInput]
+}
+
+input TodoItemInput {
+    completed: Boolean
+    label: String!
 }
