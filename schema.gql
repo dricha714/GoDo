@@ -14,8 +14,8 @@ type TodoFile {
 }
 
 type TodoItem {
-    completed: Boolean
-    label: String
+    completed: Boolean!
+    label: String!
 }
 
 type Mutation{

@@ -22,7 +22,8 @@ func main() {
 	if err != nil {
 		log.Printf("error occured while creating todo directory: ", err)
 	}
-	schema := graphql.MustParseSchema(string(schemaGQL), &query.Query{})
+	opts := []graphql.SchemaOpt{graphql.UseFieldResolvers()}
+	schema := graphql.MustParseSchema(string(schemaGQL), &query.Query{}, opts...)
 	http.Handle("/query", &relay.Handler{Schema: schema})
 	// init model
 	// graphiql

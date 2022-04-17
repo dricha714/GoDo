@@ -3,7 +3,7 @@ package inputs
 type TodoFileInput struct {
 	Name  string
 	Path  *string
-	Items *[]TodoItemInput
+	Items *[]*TodoItemInput
 }
 
 type TodoItemInput struct {

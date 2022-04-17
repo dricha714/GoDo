@@ -9,6 +9,5 @@ type TodoFileResolver struct {
 func (r *TodoFileResolver) Name() string  { return r.T.Name }
 func (r *TodoFileResolver) Path() *string { return r.T.Path }
 func (r *TodoFileResolver) Items() *[]*models.TodoItem {
-	//return r.T.Items
-	return nil
+	return r.T.Items
 }
