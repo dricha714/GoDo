@@ -8,7 +8,23 @@ type TodoFileResolver struct {
 
 func (r *TodoFileResolver) Name() string  { return r.T.Name }
 func (r *TodoFileResolver) Path() *string { return r.T.Path }
-func (r *TodoFileResolver) Items() *[]*models.TodoItem {
+func (r *TodoFileResolver) Items() TodoItemResolver {
 	//return r.T.Items
-	return nil
+	 b := "false"
+	// item := models.TodoItem{
+	// 	// Completed: &b,
+	// } 
+	res := models.TodoItem{
+		Label: &b,
+	}
+	// res = append(res, item)
+	r.T.Items = res
+
+	re := TodoItemResolver{
+		T: &models.TodoItem{
+			 Label: &b,
+		},
+	}
+
+	return re
 }

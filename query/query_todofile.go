@@ -2,11 +2,12 @@ package query
 
 import (
 	"context"
-	"github.com/CodingProjects/Go/GoDo/common"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/CodingProjects/Go/GoDo/common"
 
 	"github.com/CodingProjects/Go/GoDo/inputs"
 	"github.com/CodingProjects/Go/GoDo/models"
@@ -15,7 +16,7 @@ import (
 
 type Query struct{}
 
-func (_ *Query) TodoFile(ctx context.Context, args struct{ Name string }) *resolvers.TodoFileResolver {
+func (q *Query) TodoFile(ctx context.Context, args struct{ Name string }) *resolvers.TodoFileResolver {
 	value := resolvers.TodoFileResolver{}
 
 	files, err := os.ReadDir(common.BaseTodoDirectory())
@@ -30,16 +31,20 @@ func (_ *Query) TodoFile(ctx context.Context, args struct{ Name string }) *resol
 				log.Println(err)
 			}
 
-			//text, err := os.ReadFile(filepath)
-			//if err != nil {
-			//	log.Println(err)
-			//}
-			//data := string(text)
+			// text, err := os.ReadFile(filepath)
+			// if err != nil {
+			// 	log.Println(err)
+			// }
+			// data := string(text)
+			text := "test"
+
 			value = resolvers.TodoFileResolver{
 				T: &models.TodoFile{
 					Name: args.Name,
 					Path: &filepath,
-					//Items: &data,
+					Items: models.TodoItem{
+						Label: &text,
+					},
 				},
 			}
 		}
@@ -59,7 +64,7 @@ func (m *Query) CreateTodoFile(args struct{ TodoFile *inputs.TodoFileInput }) *r
 	}
 	if args.TodoFile.Items != nil {
 		println(args.TodoFile)
-		//var items []models.TodoItem
+		//item models.TodoItem
 		//if err := json.Unmarshal([]byte(*args.TodoFile.Items), items); err != nil {
 		//	return nil
 		//}
@@ -68,11 +73,15 @@ func (m *Query) CreateTodoFile(args struct{ TodoFile *inputs.TodoFileInput }) *r
 		//}
 	}
 
+	text := "test"
+
 	value := resolvers.TodoFileResolver{
 		T: &models.TodoFile{
 			Name: args.TodoFile.Name,
 			Path: &thepath,
-			//Items: args.TodoFile.Items,
+			Items: models.TodoItem{
+				Label: &text,
+			},
 		},
 	}
 

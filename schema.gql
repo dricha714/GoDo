@@ -10,11 +10,10 @@ type Query {
 type TodoFile {
     name: String!
     path: String
-    items: [TodoItem]
+    items: TodoItem!
 }
 
 type TodoItem {
-    completed: Boolean
     label: String
 }
 
@@ -25,10 +24,9 @@ type Mutation{
 input TodoFileInput {
 	name: String! 
     path: String
-	items: [TodoItemInput]
+	items: TodoItemInput
 }
 
 input TodoItemInput {
-    completed: Boolean
-    label: String!
+    label: String
 }

@@ -1,6 +1,6 @@
 package models
 
 type TodoItem struct {
-	Completed *bool
-	Label     string
+	// Completed *bool
+	Label     *string
 }
